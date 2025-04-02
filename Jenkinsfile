@@ -1,12 +1,12 @@
 pipeline {
     agent any
-    
+
     environment {
         DOCKER_IMAGE = "my-ecommerce-backend"
         DOCKER_TAG = "${BUILD_NUMBER}"
         REGISTRY = "santhosh2010/my-ecommerce"
     }
-    
+
     stages {
         stage('Checkout Code') {
             steps {
@@ -15,29 +15,35 @@ pipeline {
                         $class: 'GitSCM',
                         branches: [[name: '*/main']],
                         userRemoteConfigs: [[
-                            url: 'https://github.com/Santhosh2010-ramesh/E-commerce-Web-Application.git',branch:"main"
+                            url: 'https://github.com/Santhosh2010-ramesh/E-commerce-Web-Application.git',
+                            credentialsId: 'docker-hub-credentials' // Ensure you add this credential in Jenkins
                         ]]
                     ])
                 }
             }
         }
-        
+
         stage('Verify Checkout') {
             steps {
                 script {
-                    sh "ls -l"  // List files to ensure `backend/` exists
+                    sh "pwd"        // Check current directory
+                    sh "ls -lah"    // List all files
                 }
             }
         }
-        
+
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh "cd backend && docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+                    if (fileExists('Dockerfile')) {  // Ensure Dockerfile is in root
+                        sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+                    } else {
+                        error "❌ Error: 'Dockerfile' not found in root directory!"
+                    }
                 }
             }
         }
-        
+
         stage('Push to Docker Hub') {
             steps {
                 script {
@@ -48,7 +54,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Deploy to Local Docker') {
             steps {
                 script {
@@ -59,7 +65,7 @@ pipeline {
             }
         }
     }
-    
+
     post {
         success {
             echo "✅ Deployment Successful!"
