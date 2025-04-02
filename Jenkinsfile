@@ -1,71 +1,48 @@
 pipeline {
     agent any
-
+    
     environment {
-        DOCKER_IMAGE = "my-ecommerce-backend"
+        DOCKER_IMAGE = 'my-ecommerce-backend'
         DOCKER_TAG = "${BUILD_NUMBER}"
-        REGISTRY = "santhosh2010/my-ecommerce"
+        REGISTRY = 'santhosh2010/my-ecommerce'
     }
-
+    
     stages {
         stage('Checkout Code') {
             steps {
-                script {
-                    checkout([
-                        $class: 'GitSCM',
-                        branches: [[name: '*/main']],
-                        userRemoteConfigs: [[
-                            url: 'https://github.com/Santhosh2010-ramesh/E-commerce-Web-Application.git',
-                            credentialsId: 'docker-hub-credentials' // Ensure you add this credential in Jenkins
-                        ]]
-                    ])
-                }
-            }
+                git branch: 'main', url: 'https://github.com/Santhosh2010-ramesh/E-commerce-Web-Application'            }
         }
-
-        stage('Verify Checkout') {
-            steps {
-                script {
-                    sh "pwd"        // Check current directory
-                    sh "ls -lah"    // List all files
-                }
-            }
-        }
-
+        
         stage('Build Docker Image') {
             steps {
                 script {
-                    if (fileExists('Dockerfile')) {  // Ensure Dockerfile is in root
-                        sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
-                    } else {
-                        error "❌ Error: 'Dockerfile' not found in root directory!"
-                    }
+                    sh 'cd backend && docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .'
                 }
             }
         }
-
+        
         stage('Push to Docker Hub') {
             steps {
-                script {
-                    withDockerRegistry([credentialsId: 'dockerhub-credentials', url: '']) {
-                        sh "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${REGISTRY}:${DOCKER_TAG}"
-                        sh "docker push ${REGISTRY}:${DOCKER_TAG}"
-                    }
+                withDockerRegistry([credentialsId: 'dockerhub-credentials', url: '']) {
+                    sh 'docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${REGISTRY}:${DOCKER_TAG}'
+                    sh 'docker push ${REGISTRY}:${DOCKER_TAG}'
                 }
             }
         }
-
+        
         stage('Deploy to Local Docker') {
             steps {
                 script {
-                    sh "docker stop ecommerce || true"
-                    sh "docker rm ecommerce || true"
-                    sh "docker run -d --name ecommerce -p 5000:5000 ${REGISTRY}:${DOCKER_TAG}"
+                    sh '''
+                    docker stop ecommerce || true
+                    docker rm ecommerce || true
+                    docker run -d -p 5000:5000 --name ecommerce ${REGISTRY}:${DOCKER_TAG}
+                    '''
                 }
             }
         }
     }
-
+    
     post {
         success {
             echo "✅ Deployment Successful!"
