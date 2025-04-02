@@ -3,52 +3,53 @@ E-commerce Web Application using Jenkins Pipeline ,docker
 ShopEase Inc. is a growing e-commerce startup specializing in sustainable and eco-friendly products. As our development team frequently pushes updates to the backend application (built with Python or another chosen language), manual deployments have become error-prone and time-consuming. This leads to version mismatches, delayed hotfixes, and downtime during peak shopping hours, negatively affecting the user experience and revenue.
 
 To address these challenges, we have implemented a fully automated CI/CD pipeline using Jenkins Pipelines. This ensures that every time a developer commits code to the GitHub repository, the application is built, tested, and deployed seamlessly.
+
 🚀 Key Features
 
-Automated Build & Testing: Ensures code quality and reliability before deployment.
+-Automated Build & Testing: Ensures code quality and reliability before deployment.
 
-Continuous Integration: Detects changes in the repository and triggers builds automatically.
+-Continuous Integration: Detects changes in the repository and triggers builds automatically.
 
-Continuous Deployment: Deploys the latest version of the application with zero downtime.
+-Continuous Deployment: Deploys the latest version of the application with zero downtime.
 
-Containerization: Uses Docker for consistency across environments.
+-Containerization: Uses Docker for consistency across environments.
 
-Infrastructure as Code (IaC): Automates provisioning with Kubernetes and Ansible.
+-Infrastructure as Code (IaC): Automates provisioning with Kubernetes and Ansible.
 
-Security & Compliance: Incorporates security scanning tools into the pipeline.
+-Security & Compliance: Incorporates security scanning tools into the pipeline.
 
-Monitoring & Logging: Integrates with Prometheus and Grafana for real-time insights.
+-Monitoring & Logging: Integrates with Prometheus and Grafana for real-time insights.
 
 🛠️ Tech Stack
 
-Programming Language: Python (or chosen language)
+-Programming Language: Python (or chosen language)
 
-Version Control: GitHub
+-Version Control: GitHub
 
-CI/CD Tool: Jenkins Pipelines
+-CI/CD Tool: Jenkins Pipelines
 
-Containerization: Docker
+-Containerization: Docker
 
-Orchestration: Kubernetes
+-Orchestration: Kubernetes
 
-Configuration Management: Ansible
+-Configuration Management: Ansible
 
-Database: PostgreSQL
+-Database: PostgreSQL
 
-Messaging Queue: Apache Kafka
+-Messaging Queue: Apache Kafka
 
-Monitoring: Prometheus & Grafana
+-Monitoring: Prometheus & Grafana
 🏗️ CI/CD Workflow
 
-Commit & Push: Developer pushes code changes to GitHub.
+-Commit & Push: Developer pushes code changes to GitHub.
 
-Build & Test: Jenkins detects the change, triggers the pipeline, and runs tests.
+-Build & Test: Jenkins detects the change, triggers the pipeline, and runs tests.
 
-Docker Build: Application is built and pushed to the container registry.
+-Docker Build: Application is built and pushed to the container registry.
 
-Kubernetes Deployment: The latest image is deployed to the Kubernetes cluster.
+-Kubernetes Deployment: The latest image is deployed to the Kubernetes cluster.
 
-Monitoring & Alerting: Logs and metrics are collected for observability.
+-Monitoring & Alerting: Logs and metrics are collected for observability.
 
 🏁 Getting Started
 
