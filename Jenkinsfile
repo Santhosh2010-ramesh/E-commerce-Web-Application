@@ -11,7 +11,21 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 script {
-                    checkout scm
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: '*/main']],
+                        userRemoteConfigs: [[
+                            url: 'https://github.com/Santhosh2010-ramesh/E-commerce-Web-Application.git',branch:"main"
+                        ]]
+                    ])
+                }
+            }
+        }
+        
+        stage('Verify Checkout') {
+            steps {
+                script {
+                    sh "ls -l"  // List files to ensure `backend/` exists
                 }
             }
         }
@@ -19,7 +33,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} backend/"
+                    sh "cd backend && docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
                 }
             }
         }
